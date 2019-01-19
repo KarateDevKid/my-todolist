@@ -5,15 +5,104 @@
         <title>My todolist</title>
         <style>
             a {text-decoration: none; color: black;}
+            .icon-button 
+            {
+                 cursor: pointer; 
+                 background:none;
+                 border:none; 
+                 padding:0;
+            }
         </style>
+        <script>
+            const displaySectionClassName = 'display_section';
+            const editSectionClassName = 'edit_section';
+            const todoItemClassName = 'todo_item';
+
+            function getTodoItemSection(sectionClass, todoItem)
+            {
+                let section = undefined;
+                let sections = todoItem.getElementsByClassName(sectionClass);
+                if(sections && sections.length > 0)
+                {
+                    section = sections[0];
+                }
+                return section;
+            }
+
+            function updateTodoItemSections(todoItem, onDisplaySectionUpdate, onEditSectionUpdate)
+            {
+                let displaySection = getTodoItemSection(displaySectionClassName, todoItem);
+                if(displaySection != null)
+                {
+                    if(onDisplaySectionUpdate && typeof onDisplaySectionUpdate === 'function')
+                    {
+                        onDisplaySectionUpdate(displaySection);
+                    }
+                }    
+
+                let editSection = getTodoItemSection(editSectionClassName, todoItem);
+                if(editSection != null)
+                {
+                    if(onEditSectionUpdate && typeof onEditSectionUpdate === 'function')
+                    {
+                        onEditSectionUpdate(editSection);
+                    }
+                }    
+            }
+
+            function resetTodoItemSections(excludeItem)
+            {
+                let todoItems = document.getElementsByClassName(todoItemClassName);
+                if(todoItems && todoItems.length > 0)
+                {
+                    for(let i = 0; i < todoItems.length; i++)
+                    {
+                        let todoItem = todoItems[i];
+                        if(todoItem && i != excludeItem)
+                        {
+                            updateTodoItemSections(todoItem, (displaySection) => 
+                            {
+                                displaySection.hidden = false;
+                            },
+                            (editSection) => 
+                            {
+                                editSection.hidden = true;
+                            });   
+                        }
+                    }
+                }
+            }
+            function toggleTodoItemEdit(itemIndex)
+            {
+                let todoItem = document.getElementById(todoItemClassName + '_' + itemIndex);
+                if(todoItem)
+                {
+                    updateTodoItemSections(todoItem, (displaySection) => 
+                    {
+                        displaySection.hidden = (displaySection.hidden == true ? false : true);
+                    },
+                    (editSection) => 
+                    {
+                        editSection.hidden = (editSection.hidden == true ? false : true);
+                    });    
+                }
+
+                resetTodoItemSections(itemIndex);
+            }
+        </script>
     </head>
 
     <body>
         <h1>My todolist</h1>
         <ul>
-        <% todolist.forEach(function(todo, index) { %>
-            <li><a href="/todo/delete/<%= index %>">✘</a> <%- todo %></li>
-        <% }); %>
+            <% todolist.forEach(function(todo, index) { %>
+                <li class="todo_item" id='todo_item_<%= index %>'>
+                    <span class="display_section"><a href="/todo/delete/<%= index %>">✘</a>&nbsp;|&nbsp;<span class="icon-button" onClick="toggleTodoItemEdit('<%= index %>')">✎</span>&nbsp;| <%- todo %></span>
+                    <form action='/todo/update/<%= index %>?_method=PUT' method="post" hidden="true" class="edit_section">
+                        <input type="text" id="updatedtodo" name="updatedtodo" value="<%= todo %>"/>&nbsp;<button class="icon-button" type="submit" href="">✔</button>&nbsp;|&nbsp;<span class="icon-button" onClick="toggleTodoItemEdit('<%= index %>')">🗙</span>
+                    </form>
+                </li>
+            <% }); %>
         </ul>
 
         <form action="/todo/add/" method="post">

@@ -1,8 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 const app = express();
+app.use(methodOverride('_method'));
 
 let todolist = [];
 
@@ -12,9 +14,27 @@ app.get('/todo', function(req, res) {
 })
 
 /* Adding an item to the to do list */
-.post('/todo/add/', urlencodedParser, function(req, res) {
-    if (req.body.newtodo != '') {
-        todolist.push(req.body.newtodo);
+.post('/todo/add/', urlencodedParser, (req, res) => {
+    let text = req.body.newtodo;
+    text = text.trim();
+    if (text != '') {
+        todolist.push(text);
+    }
+    res.redirect('/todo');
+})
+
+/* Updating an item in the to do list */
+.put('/todo/update/:id', urlencodedParser, (req, res) => 
+{
+    let id = req.params.id;
+    let text = req.body.updatedtodo;
+    text = text.trim();
+    if(text != '' && id != '')
+    {
+         if(todolist[id])
+         {
+            todolist[id] = text;
+         }
     }
     res.redirect('/todo');
 })
