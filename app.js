@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
+const xss = require("xss");
 
 const app = express();
 app.use(methodOverride('_method'));
@@ -15,7 +16,7 @@ app.get('/todo', function(req, res) {
 
 /* Adding an item to the to do list */
 .post('/todo/add/', urlencodedParser, (req, res) => {
-    let text = req.body.newtodo;
+    let text = xss(req.body.newtodo);
     text = text.trim();
     if (text != '') {
         todolist.push(text);
@@ -27,7 +28,7 @@ app.get('/todo', function(req, res) {
 .put('/todo/update/:id', urlencodedParser, (req, res) => 
 {
     let id = req.params.id;
-    let text = req.body.updatedtodo;
+    let text = xss(req.body.updatedtodo);
     text = text.trim();
     if(text != '' && id != '')
     {
