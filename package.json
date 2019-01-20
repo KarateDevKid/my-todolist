@@ -11,10 +11,11 @@
   "description": "Basic to do list exercise",
   "scripts": {
     "start": "node app.js",
-    "test": "mocha"
+    "test": "nyc mocha --exit"
   },
   "devDependencies": {
     "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
     "supertest": "^3.4.1"
   }
 }
