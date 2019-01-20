@@ -83,4 +83,11 @@ npm test
 ### Task 4:
 
 * Installed `nyc` with the following command: `npm install --save-dev nyc`.
-* Added `nyc` to the test script in `package.json`: `"test": "nyc mocha --exit"`.  
+* Added `nyc` to the test script in `package.json`: `"test": "nyc mocha --exit"`.
+
+### Task 5:
+
+* Installed `xss` with the following command: `npm install xss`.
+* Added script filtering to the `newtodo` parameter of the add todo item endpoint(`'/todo/add/'`) using `xss`: `xss(req.body.newtodo);`.
+* Added script filtering to the `updatedtodo` parameter of the update todo item endpoint(`'/todo/update/:id'`) using `xss`: `xss(req.body.updatedtodo);`.
+* Added tests to `app.test.js` that test both the add and update todo item endpoints in `app.js` by adding and updating a todo item using the folowing script as the todo item value: `'<script>alert("xss");</script>'`    
