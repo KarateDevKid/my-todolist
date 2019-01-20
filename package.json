@@ -10,6 +10,11 @@
   "author": "riaan@entersekt.com",
   "description": "Basic to do list exercise",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "supertest": "^3.4.1"
   }
 }
