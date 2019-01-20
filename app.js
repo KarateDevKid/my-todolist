@@ -53,3 +53,6 @@ app.get('/todo', function(req, res) {
 })
 
 .listen(8080);
+
+module.exports.app = app;
+module.exports.todolist = todolist;
