@@ -20,10 +20,10 @@ Then run
 `docker run -it -p 9000:8080 my-todolist`
 
 ## Run Tests
-First, install `mocha` and `supertest`
+First, install `mocha`, `supertest` and `nyc`
 
 ```
-npm install --save-dev mocha supertest
+npm install --save-dev mocha supertest nyc
 ```
 
 And then run
@@ -79,3 +79,8 @@ npm test
 * `RUN npm install`, installs all modules listed as dependencies in `package.json`.
 * `COPY . /app`, copies the application source files to the working directory.
 * `CMD ["npm", "start"]`, specifies that the `npm start` command must be executed to run the container.
+
+### Task 4:
+
+* Installed `nyc` with the following command: `npm install --save-dev nyc`.
+* Added `nyc` to the test script in `package.json`: `"test": "nyc mocha --exit"`.  
